@@ -5,7 +5,7 @@
 SELECT county, population,
 	CASE
 		WHEN population >= 500000 THEN 'high'
-		WHEN population BETWEEN 100000 AND 500000 THEN 'medium'
+		WHEN population > 100000 AND population < 500000 THEN 'medium'
 		WHEN population <= 100000 THEN 'low'
 	END AS pop_category
 FROM population
