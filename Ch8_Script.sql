@@ -12,8 +12,8 @@ SELECT country, SUBSTRING(year, 1, 4) AS calendar_year, nobel_prize_winners,
 		WHEN pop_in_millions::numeric < 50 THEN 'small'
 	END AS country_size
 FROM countries
-INNER JOIN country_stats
-ON id = country_id
+	INNER JOIN country_stats
+		ON id = country_id
 WHERE nobel_prize_winners > 0
 ORDER BY nobel_prize_winners DESC;
 
@@ -21,6 +21,6 @@ ORDER BY nobel_prize_winners DESC;
 SELECT country,  SUBSTRING(year, 1, 4) AS calendar_year, 
 	COALESCE(gdp::numeric::money::text, 'unknown') AS gdp_amount
 FROM countries
-INNER JOIN country_stats
-ON id = country_id
+	INNER JOIN country_stats
+		ON id = country_id
 ORDER BY country, year;

@@ -39,27 +39,34 @@ FROM summer_games;
 SELECT country, COUNT(athlete_id) AS number_athletes
 FROM summer_games
 	FULL JOIN countries
-	ON country_id = id
+		ON country_id = id
 GROUP BY country
 ORDER BY COUNT(athlete_id);
 -- No country had 0 athletes
 
--- Write a query to list countries by total bronze medals, with the highest totals at the top and nulls at the bottom. 
-SELECT country, SUM(summer_games.bronze + winter_games.bronze) AS total_bronze
+SELECT country, SUM(all_games.bronze) AS total_bronze
 FROM countries
-	FULL JOIN summer_games
+	INNER JOIN (SELECT *
+				FROM summer_games
+				UNION
+				SELECT *
+				FROM winter_games) AS all_games
+		ON id = country_id
+GROUP BY country
+ORDER BY total_bronze DESC NULLS LAST;
+
+-- Write a query to list countries by total bronze medals, with the highest totals at the top and nulls at the bottom. 
+SELECT country, SUM(summer_games.bronze) AS total_bronze
+FROM countries
+	INNER JOIN summer_games
 		ON id = summer_games.country_id
-	FULL JOIN winter_games
-		ON id = winter_games.country_id
 GROUP BY country
 ORDER BY total_bronze DESC NULLS LAST;
 --Adjust the query to only return the country with the most bronze medals
-SELECT country, SUM(summer_games.bronze + winter_games.bronze) AS total_bronze
+SELECT country, SUM(summer_games.bronze) AS total_bronze
 FROM countries
-	FULL JOIN summer_games
+	INNER JOIN summer_games
 		ON id = summer_games.country_id
-	FULL JOIN winter_games
-		ON id = winter_games.country_id
 GROUP BY country
 ORDER BY total_bronze DESC NULLS LAST
 LIMIT 1;
